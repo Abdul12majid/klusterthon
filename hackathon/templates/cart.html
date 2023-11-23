@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+
+{% load static %}
+<html>
+
+<head>
+  <!-- Basic -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!-- Mobile Metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <!-- Site Metas -->
+  <link rel="icon" href="{% static 'images/fevicon/fevicon.png' %}" type="image/gif" />
+  <meta name="keywords" content="" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+
+  <title>Group 136</title>
+
+
+  <!-- bootstrap core css -->
+  <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+
+  <!-- fonts style -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+  <!-- font awesome style -->
+  <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" />
+
+  <!-- Custom styles for this template -->
+  <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+  <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+  <!-- responsive style -->
+  <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
+
+</head>
+
+<body>
+
+  <div class="hero_area">
+    <!-- header section strats -->
+    <header class="header_section">
+      <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg custom_nav-container ">
+          <a class="navbar-brand" href="/">
+            <span>
+              KLUSTERTHON
+            </span>
+          </a>
+
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class=""> </span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav  ">
+              <li class="nav-item">
+                <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+              </li>
+             
+              <li class="nav-item">
+                <a class="nav-link" href="/contact">Contact Us</a>
+              </li>
+            </ul>
+            <div class="user_optio_box">
+              <a href="">
+                <i class="fa fa-user" aria-hidden="true"></i>
+              </a>
+              <a href="{% url 'add-cart' %}">
+
+                <i class="fa fa-shopping-cart" aria-hidden="true"><p id="num_of_items">{{cart.num_of_items}}</p></i>
+
+              </a>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </header></br></br></br></br></br>
+
+     <!-- service section -->
+
+  <section class="service_section">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-6 col-lg-3">
+          <div class="box ">
+            <div class="img-box">
+              <img src="{% static 'images/feature-1.png' %}" alt="">
+            </div>
+            <div class="detail-box">
+              <h5>
+                Fast Delivery
+              </h5>
+              <p>
+                variations of passages of Lorem Ipsum available
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="box ">
+            <div class="img-box">
+              <img src="{% static 'images/feature-2.png' %}" alt="">
+            </div>
+            <div class="detail-box">
+              <h5>
+                Free Shiping
+              </h5>
+              <p>
+                variations of passages of Lorem Ipsum available
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="box ">
+            <div class="img-box">
+              <img src="{% static 'images/feature-3.png' %}" alt="">
+            </div>
+            <div class="detail-box">
+              <h5>
+                Best Quality
+              </h5>
+              <p>
+                variations of passages of Lorem Ipsum available
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="box ">
+            <div class="img-box">
+              <img src="{% static 'images/feature-4.png' %}" alt="">
+            </div>
+            <div class="detail-box">
+              <h5>
+                24x7 Customer support
+              </h5>
+              <p>
+                variations of passages of Lorem Ipsum available
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section></br></br></br></br></br></br>
+
+  <!-- end service section -->
+
+<script src="https://checkout.flutterwave.com/v3.js"></script>
+<div class="container">
+  <center><h2>Cart</h2></center>
+    <div class="row">
+  <div class="col-lg-12">
+    <div class="box-element">
+      <a class="btn btn-outline-dark" href="/">&#x2190;Continue Shopping</a></br></br>
+
+      <table class="table">
+        <tr>
+          <th><h5>Items: <strong>{{ cart.num_of_items }}</strong></h5></th>
+          <th><h5>Total: <strong>${{ cart.total_price|floatformat:2 }}</strong></h5></th>
+          <th>
+            <button type="button" onclick="makePayment()">Pay Now</button>
+            <!-- <button onclick = "makePayment()" style="float: right; margin: 5px;" class="btn btn-success" href="">Checkout</button> -->
+          </th>
+
+        </tr>
+      </table>
+      
+    </div>
+    </br>
+
+    <div class="box-element">
+      <div class="cart-row">
+        <div style="flex:2"></div>
+        <div style="flex:2"><b>Item</b></div>
+        <div style="flex:1"><b>Price</b></div>
+        <div style="flex:1"><b>Quantity</b></div>
+        <div style="flex:1"><b>Total</b></div>
+        
+      </div>
+      {% for item in cartitems %}
+      <div class="cart-row">
+        
+        <div style="flex:2">
+          <img src="{{ item.product.image.url }}" class="row-image">
+        </div>
+        <div style="flex:2">{{ item.product.name }}</div>
+        <div style="flex:1">${{ item.product.price|floatformat:2 }}</div>
+        <div style="flex:1">
+          <p class="quantity">{{ item.quantity }}</p>
+        </div>
+        <div style="flex:1">${{ item.price}}</div>
+        
+      </div>
+      {% endfor %}
+    </div>
+
+  </div>  
+ </div>
+</div>
+
+
+
+</br></br></br></br></br></br></br></br>
+
+
+  <!-- footer section -->
+  <section class="footer_section">
+    <div class="container">
+      <p>
+        Klusterthon Hackerthon_
+      </p>
+    </div>
+  </section>
+  <!-- footer section -->
+
+
+  
+  
+  <script>
+
+    let cart_total = "{{ cart.total_price }}"
+    let cart_id = "{{ cart.id }}"
+
+    function makePayment() {
+      FlutterwaveCheckout({
+        public_key: "FLWPUBK_TEST-6ec2e171b112868ec93c4b64a5487e1d-X",
+        tx_ref: "titanic-48981487343MDI0NzMx",
+        amount: cart_total,
+        currency: "USD",
+        payment_options: "card, mobilemoneyghana, ussd",
+        redirect_url: "https://127.0.0.1:8000/confirm_payment"+cart_id,
+        meta: {
+          consumer_id: 23,
+          consumer_mac: "92a3-912ba-1192a",
+        },
+        customer: {
+          email: "rose@unsinkableship.com",
+          phone_number: "08102909304",
+          name: "Rose DeWitt Bukater",
+        },
+        customizations: {
+          title: "Klusterthon_ stores",
+          description: "Payment",
+          logo: "https://www.logolynx.com/images/logolynx/22/2239ca38f5505fbfce7e55bbc0604386.jpeg",
+        },
+      });
+}
+  </script>
+
+  <!-- jQery -->
+  <script type="text/javascript" src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+  <!-- popper js -->
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+  </script>
+  <!-- bootstrap js -->
+  <script type="text/javascript" src="{% static 'js/bootstrap.js' %}"></script>
+  <!-- custom js -->
+  <script type="text/javascript" src="{% static 'js/custom.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/script.js' %}"></script>
+  <!-- Google Map -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh39n5U-4IoWpsVGUHWdqB6puEkhRLdmI&callback=myMap"></script>
+  <!-- End Google Map -->
+
+</body>
+
+</html>

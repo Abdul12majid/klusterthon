@@ -2,23 +2,43 @@ from django.shortcuts import render, redirect
 from .models import Product, Category, Cart, CartItem
 from django.http import JsonResponse
 import json
+from django.contrib import messages
 
 # Create your views here.
 def home(request):
-	category_1 = 'New Arrivals'
-	category_2 = 'Top sales'
-	category_3 = 'Features'
-	get_1 = Category.objects.get(name='New Arrivals')
+	messages.success(request, ('Payments Made Successfully'))
+	category_1 = 'Glasses'
+	category_2 = 'Watches'
+	category_3 = 'Shirts'
+
+	get_1 = Category.objects.get(name=category_1)
 	get_2 = Category.objects.get(name=category_2)
 	get_3 = Category.objects.get(name=category_3)
-	products = Product.objects.all()
-	#print(get_1)
+
+	products_1 = Product.objects.filter(category=get_1)
+	products_2 = Product.objects.filter(category=get_2)
+	x = 'Watches' == category_2
+	print(x)
+	products_3 = Product.objects.filter(category=get_3)
+	
+	if request.user.is_authenticated:
+		cart, created = Cart.objects.get_or_create(user=request.user, completed=False)
+	
 	products_2 = Product.objects.filter(category=get_2)
 	products_3 = Product.objects.filter(category=get_3)
-	return render(request, 'home.html', {'products':products, 'products_2':products_2, 'products_3':products_3})
+	return render(request, 'home.html', {'x':x, 'products_1':products_1, 'products_2':products_2, 'products_3':products_3, 'cart':cart})
+
+
 
 
 '''
+from django.contrib.auth.decorators import login_required
+
+
+# Create your views here.
+#@login_required(login_url='login-user')
+
+
 def category(request, foo):
 	foo = foo.replace('-', ' ')
 	try:
@@ -28,6 +48,20 @@ def category(request, foo):
 	except:
 		messages.success(request, ("Category doesn't exist"))
 		return redirect('home')
+
+
+
+def cart(request):
+	cart = None
+	cartitems = []
+
+
+	if request.user.is_authenticated:
+		cart, created = Cart.objects.get_or_create(user=request.user, completed=False)
+		cartitems = cart.cart_items.all()
+
+	return render(request, 'cart.html', 'cart':cart, 'cartitems':cartitems)
+
 '''
 
 def add_to_cart(request):
@@ -40,4 +74,32 @@ def add_to_cart(request):
 		print(cartitem)
 		cartitem.quantity += 1
 		cartitem.save()
-	return JsonResponse("it is working", safe=False)
+		num_of_item = cart.num_of_items
+	return JsonResponse(num_of_item, safe=False)
+
+
+
+def cart(request):
+	cart = None
+	cartitems = []
+
+	if request.user.is_authenticated:
+		cart, created = Cart.objects.get_or_create(user=request.user, completed=False)
+		cartitems = cart.cart_items.all()
+
+	return render(request, 'cart.html', {'cart':cart, 'cartitems':cartitems})
+
+
+def contact(request):
+	messages.success(request, ('Payments Made Successfully'))
+	return render(request, 'contact.html', {})
+
+
+
+def confirm_payment(request, pk):
+	cart = Cart.objects.get(id=pk)
+	cart.completed = True
+	cart.save()
+	messages.success(request, 'Payments Made Successfully')
+	return redirect('/products')
+
