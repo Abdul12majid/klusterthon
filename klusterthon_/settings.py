@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-(xb_rz(5^sax&9txg7facl749j^vn9))72bxju(tnvkj7nv%r=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'whitenoise.runserver_nostatic',
+    'corsheaders',
     'hackathon',
     'fintech_',
     'rest_framework',
@@ -46,12 +48,15 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+#CSRF_TRUSTED_ORIGINS = ['https://tweeter-production-32ff.up.railway.app']
 
 ROOT_URLCONF = 'klusterthon_.urls'
 

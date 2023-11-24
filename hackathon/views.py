@@ -1,12 +1,15 @@
 from django.shortcuts import render, redirect
-from .models import Product, Category, Cart, CartItem
+from .models import Product, Category, Cart, CartItem, Cart_Info
 from django.http import JsonResponse
 import json
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+
+@login_required(login_url='/owner/login_user')
 def home(request):
-	messages.success(request, ('Payments Made Successfully'))
+	
 	category_1 = 'Glasses'
 	category_2 = 'Watches'
 	category_3 = 'Shirts'
@@ -63,7 +66,7 @@ def cart(request):
 	return render(request, 'cart.html', 'cart':cart, 'cartitems':cartitems)
 
 '''
-
+@login_required(login_url='/owner/login_user')
 def add_to_cart(request):
 	data = json.loads(request.body)
 	product_id = data['id']
@@ -71,6 +74,16 @@ def add_to_cart(request):
 	if request.user.is_authenticated:
 		cart, created = Cart.objects.get_or_create(user=request.user, completed=False)
 		cartitem, created = CartItem.objects.get_or_create(cart=cart, product=product)
+
+		cart_id = str(cart.id)
+
+		if Cart_Info.objects.filter(cart_id=cart_id).exists():
+			pass
+		else:
+			info = Cart_Info.objects.create(cart_id=cart_id, user=request.user.username)
+			info.save()
+		
+		
 		print(cartitem)
 		cartitem.quantity += 1
 		cartitem.save()
@@ -78,28 +91,38 @@ def add_to_cart(request):
 	return JsonResponse(num_of_item, safe=False)
 
 
-
+@login_required(login_url='/owner/login_user')
 def cart(request):
 	cart = None
 	cartitems = []
 
 	if request.user.is_authenticated:
 		cart, created = Cart.objects.get_or_create(user=request.user, completed=False)
+		
+
 		cartitems = cart.cart_items.all()
 
 	return render(request, 'cart.html', {'cart':cart, 'cartitems':cartitems})
 
-
+@login_required(login_url='/owner/login_user')
 def contact(request):
-	messages.success(request, ('Payments Made Successfully'))
+	
 	return render(request, 'contact.html', {})
 
 
-
+@login_required(login_url='/owner/login_user')
 def confirm_payment(request, pk):
 	cart = Cart.objects.get(id=pk)
+	x=cart.id
 	cart.completed = True
+
+
+	person_id = str(x)
+	info = Cart_Info.objects.get(cart_id=person_id)
+	info.payment_status = True
+	info.save()
 	cart.save()
 	messages.success(request, 'Payments Made Successfully')
-	return redirect('/products')
+	print('Hi')
+	return redirect('/')
 

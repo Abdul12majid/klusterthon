@@ -70,3 +70,8 @@ class CartItem(models.Model):
 		new_price = self.product.price * self.quantity
 		return new_price
 
+
+class Cart_Info(models.Model):
+	cart_id = models.CharField(max_length=50)
+	user = models.CharField(max_length=30)
+	payment_status = models.BooleanField(default=False)
