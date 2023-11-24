@@ -80,7 +80,10 @@ def tables(request):
 	return render(request, 'tables.html', {'get_users':get_users, 'cart_info':cart_info})
 
 
-
+def logout_user(request):
+	logout(request)
+	#messages.success(request, (f'You are logged out'))
+	return redirect('login-user')
 
 
 
