@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from hackathon.models import Cart, Cart_Info
+from django.contrib import messages
 
 
 # Create your views here.
