@@ -57,7 +57,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-#CSRF_TRUSTED_ORIGINS = ['https://tweeter-production-32ff.up.railway.app']
+CSRF_TRUSTED_ORIGINS = ['https://klusterthon-production.up.railway.app']
 
 ROOT_URLCONF = 'klusterthon_.urls'
 
