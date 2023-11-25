@@ -8,12 +8,15 @@ from django.contrib import messages
 
 # Create your views here.
 def home(request):
+	get_users = User.objects.all()
+	item = Cart.objects.all()
+	cart_info_ = Cart_Info.objects.all()
+	print(item)
 	user_count = User.objects.count()
-	
 	cart_info = Cart_Info.objects.filter(payment_status=False)
 	x = cart_info.count()
 
-	return render(request, 'index.html', {'user_count':user_count, 'x':x})
+	return render(request, 'index.html', {'get_users':get_users, 'user_count':user_count, 'x':x, 'cart_info_':cart_info_})
 
 
 def login_user(request):
