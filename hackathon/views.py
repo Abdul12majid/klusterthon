@@ -7,6 +7,11 @@ from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
+
+def docs(request):
+	return render(request,'docs.html', {})
+
+
 @login_required(login_url='/owner/login_user')
 def home(request):
 	
@@ -20,8 +25,7 @@ def home(request):
 
 	products_1 = Product.objects.filter(category=get_1)
 	products_2 = Product.objects.filter(category=get_2)
-	x = 'Watches' == category_2
-	print(x)
+	
 	products_3 = Product.objects.filter(category=get_3)
 	
 	if request.user.is_authenticated:
@@ -29,43 +33,8 @@ def home(request):
 	
 	products_2 = Product.objects.filter(category=get_2)
 	products_3 = Product.objects.filter(category=get_3)
-	return render(request, 'home.html', {'x':x, 'products_1':products_1, 'products_2':products_2, 'products_3':products_3, 'cart':cart})
+	return render(request, 'home.html', {'products_1':products_1, 'products_2':products_2, 'products_3':products_3, 'cart':cart})
 
-
-
-
-'''
-from django.contrib.auth.decorators import login_required
-
-
-# Create your views here.
-#@login_required(login_url='login-user')
-
-
-def category(request, foo):
-	foo = foo.replace('-', ' ')
-	try:
-		category = Category.objects.get(name=foo)
-		products = Product.objects.filter(category=category)
-		return render(request, 'commerce/category.html', {'products':products, 'category':category})
-	except:
-		messages.success(request, ("Category doesn't exist"))
-		return redirect('home')
-
-
-
-def cart(request):
-	cart = None
-	cartitems = []
-
-
-	if request.user.is_authenticated:
-		cart, created = Cart.objects.get_or_create(user=request.user, completed=False)
-		cartitems = cart.cart_items.all()
-
-	return render(request, 'cart.html', 'cart':cart, 'cartitems':cartitems)
-
-'''
 @login_required(login_url='/owner/login_user')
 def add_to_cart(request):
 	data = json.loads(request.body)
@@ -110,7 +79,7 @@ def contact(request):
 	return render(request, 'contact.html', {})
 
 
-@login_required(login_url='/owner/login_user')
+
 def confirm_payment(request, pk):
 	cart = Cart.objects.get(id=pk)
 	x=cart.id
@@ -120,9 +89,11 @@ def confirm_payment(request, pk):
 	person_id = str(x)
 	info = Cart_Info.objects.get(cart_id=person_id)
 	info.payment_status = True
+	info.price_total += cart.total_price
+	info.price_total2 += info.price_total
 	info.save()
 	cart.save()
 	messages.success(request, 'Payments Made Successfully')
 	print('Hi')
-	return redirect('/')
+	return redirect('/owner')
 

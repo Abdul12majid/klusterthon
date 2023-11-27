@@ -7,6 +7,8 @@ from django.contrib import messages
 
 
 # Create your views here.
+
+
 def home(request):
 	get_users = User.objects.all()
 	item = Cart.objects.all()
@@ -15,8 +17,10 @@ def home(request):
 	user_count = User.objects.count()
 	cart_info = Cart_Info.objects.filter(payment_status=False)
 	x = cart_info.count()
-
-	return render(request, 'index.html', {'get_users':get_users, 'user_count':user_count, 'x':x, 'cart_info_':cart_info_})
+	p = Cart_Info.objects.last()
+	y = p.price_total2
+	#price = y + 
+	return render(request, 'index.html', {'y':y, 'item':item,'get_users':get_users, 'user_count':user_count, 'x':x, 'cart_info_':cart_info_})
 
 
 def login_user(request):
@@ -36,7 +40,7 @@ def login_user(request):
 			user_ = authenticate(request, username=username, password=password)
 			if user_ is not None:
 				login(request, user_)
-				return redirect('/')
+				return redirect('/home')
 			else:
 				messages.success(request, ('invalid details'))
 				return redirect(request.META.get("HTTP_REFERER"))

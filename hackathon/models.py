@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models 
 from django.core.validators import MinLengthValidator
 import datetime
 import uuid
@@ -75,3 +75,5 @@ class Cart_Info(models.Model):
 	cart_id = models.CharField(max_length=50)
 	user = models.CharField(max_length=30)
 	payment_status = models.BooleanField(default=False)
+	price_total = models.IntegerField(default=0)
+	price_total2 = models.IntegerField(default=0)
